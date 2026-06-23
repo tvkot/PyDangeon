@@ -1,0 +1,24 @@
+#размеры
+TILE_SIZE = 32
+MAP_WIDTH = 20
+MAP_HEIGHT = 20
+
+#ширина и высота
+SCREEN_W = MAP_WIDTH * TILE_SIZE
+SCREEN_H = MAP_HEIGHT * TILE_SIZE
+
+# фпс
+FPS = 60
+
+#цвета
+BLACK = (0,0,0)
+BROWN = (102,51,0)
+GREY = (96,96,96)
+BLUE = (0,102,102)
+DARK_GREY = (64,64,64)
+LIME = (16, 176, 21)
+ORANGE = (219, 132, 33)
+DARK_BLUE = (0, 25, 117)
+DARK_YELLOW = (103, 105, 2)
+YELLOW = (236, 240, 7)
+RED = (255, 0, 0)
