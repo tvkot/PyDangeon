@@ -2,6 +2,15 @@ import pygame
 from settings import *
 
 
+def _load_sound(*paths):
+    for path in paths:
+        try:
+            return pygame.mixer.Sound(path)
+        except pygame.error:
+            continue
+    return None
+
+
 class Player:
     def __init__(self, tilemap, start_x, start_y):
         # tilemap — это наша карта, передаём её сюда
@@ -23,7 +32,14 @@ class Player:
         self.image = pygame.image.load("assets/images/picture_player.png")
         self.image = pygame.transform.scale(self.image, (self.size, self.size))
 
-        self.attack_sound = pygame.mixer.Sound("assets/sounds/sound_hit.mp3")
+        if not pygame.mixer.get_init():
+            pygame.mixer.init()
+
+        self.attack_sound = _load_sound("assets/sounds/sound_hit.mp3")
+        self.step_sound = _load_sound(
+            "assets/sounds/sound_walking.mp3",
+            "assets/sounds/sound_fast_walking.mp3",
+        )
 
     def is_adjacent(self, other_x, other_y):
         dx = abs(self.x - other_x)
@@ -33,7 +49,8 @@ class Player:
     def attack(self, enemy, enemy2, enemy3):
         for target in (enemy, enemy2, enemy3):
             if target.alive and self.is_adjacent(target.x, target.y):
-                self.attack_sound.play()
+                if self.attack_sound:
+                    self.attack_sound.play()
                 target.take_damage(1.5)
                 break
 
@@ -54,6 +71,8 @@ class Player:
         if not self.tilemap.is_wall(new_x, new_y):
             self.x = new_x
             self.y = new_y
+            if self.step_sound:
+                self.step_sound.play()
 
     def handle_event(self, event, enemy, enemy2, enemy3):
         if event.type == pygame.KEYDOWN:

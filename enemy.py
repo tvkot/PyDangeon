@@ -15,7 +15,7 @@ class Enemy:
 
         self.alive = True
 
-        self.image = pygame.image.load("PyDangeon/assets/images/enemy.png").convert_alpha()
+        self.image = pygame.image.load("assets/images/enemy.png").convert_alpha()
         self.image = pygame.transform.scale(self.image, (self.size, self.size))
 
         for x in range(self.image.get_width()):
