@@ -23,7 +23,11 @@ class Player:
         self.image = pygame.image.load("assets/images/picture_player.png")
         self.image = pygame.transform.scale(self.image, (self.size, self.size))
 
+        if not pygame.mixer.get_init():
+            pygame.mixer.init()
+
         self.attack_sound = pygame.mixer.Sound("assets/sounds/sound_hit.mp3")
+        self.step_sound = pygame.mixer.Sound("assets/sounds/sound_fast_walking.mp3")
 
     def is_adjacent(self, other_x, other_y):
         dx = abs(self.x - other_x)
@@ -54,6 +58,7 @@ class Player:
         if not self.tilemap.is_wall(new_x, new_y):
             self.x = new_x
             self.y = new_y
+            self.step_sound.play()
 
     def handle_event(self, event, enemy, enemy2, enemy3):
         if event.type == pygame.KEYDOWN:
