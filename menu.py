@@ -34,28 +34,43 @@ def _button_clicked(event, rect):
 def show_settings(screen, clock):
     font_title = pygame.font.SysFont(None, 56)
     font_button = pygame.font.SysFont(None, 40)
+    hint_font = pygame.font.SysFont(None, 32)
 
-    # Центрируем кнопку "Назад" внизу экрана
-    back_rect = pygame.Rect(SCREEN_W // 2 - 100, SCREEN_H - 120, 200, 60)
+    title_w, title_h = 320, 70
+    button_w, button_h = 220, 70
+    gap = 40
 
     while True:
+        sw, sh = screen.get_size()
+
+        total_h = title_h + gap + 40 + gap + button_h
+        start_y = sh // 2 - total_h // 2
+
+        title_rect = pygame.Rect(sw // 2 - title_w // 2, start_y, title_w, title_h)
+        back_rect = pygame.Rect(
+            sw // 2 - button_w // 2,
+            start_y + title_h + gap + 40 + gap,
+            button_w,
+            button_h,
+        )
+
         mouse_pos = pygame.mouse.get_pos()
         back_hovered = back_rect.collidepoint(mouse_pos)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return "quit"
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                return "menu"
             if _button_clicked(event, back_rect):
                 return "menu"
 
         screen.fill((15, 25, 45))
 
-        title_rect = pygame.Rect(SCREEN_W // 2 - 160, 80, 320, 70)
         _draw_box(screen, title_rect, "Настройки", font_title, (100, 200, 255), (100, 200, 255))
 
-        hint_font = pygame.font.SysFont(None, 32)
         hint = hint_font.render("Скоро здесь будут настройки", True, (255, 100, 100))
-        screen.blit(hint, (SCREEN_W // 2 - hint.get_width() // 2, 280))
+        screen.blit(hint, (sw // 2 - hint.get_width() // 2, start_y + title_h + gap))
 
         border = (100, 200, 255) if back_hovered else WHITE
         text_col = (100, 200, 255) if back_hovered else WHITE
