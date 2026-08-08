@@ -42,7 +42,7 @@ MAP_DATA2 = [
     "#..................#",
     "#..................#",
     "#..................#",
-    "....................",
+    "D...................",
     "#..................#",
     "#..................#",
     "#..................#",
@@ -94,6 +94,15 @@ class TileMap:
     def is_wall(self, x, y):
         tiles = self.maps[self.current_map]
         return tiles[y][x] == TILE_WALL
+
+    def is_door(self, x, y):
+        tiles = self.maps[self.current_map]
+        return tiles[y][x] == TILE_DOOR
+
+    def switch_map(self, new_map, player):
+        self.current_map = new_map
+        player.x = 1
+        player.y = 1
 
     def draw(self, screen, player):
         tiles = self.maps[self.current_map]
