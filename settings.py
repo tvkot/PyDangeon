@@ -4,8 +4,8 @@ MAP_WIDTH = 20
 MAP_HEIGHT = 20
 
 #ширина и высота
-SCREEN_W = 1920
-SCREEN_H = 1080
+SCREEN_W = MAP_WIDTH * TILE_SIZE
+SCREEN_H = MAP_HEIGHT * TILE_SIZE
 
 # фпс
 FPS = 60
@@ -22,3 +22,11 @@ DARK_BLUE = (0, 25, 117)
 DARK_YELLOW = (103, 105, 2)
 YELLOW = (236, 240, 7)
 RED = (255, 0, 0)
+WHITE = (255,255,255)
+sound_enabled = True
+screen_size = "big"
+
+SCREEN_SIZES = {
+  "big": (1920, 1080),
+  "small": (800,600),
+}
