@@ -7,12 +7,10 @@ class Enemy:
         self.x = x
         self.y = y
 
-        self.size = TILE_SIZE - -20
+        self.size = TILE_SIZE + 20
 
         self.color = RED
-
         self.hp = 3
-
         self.alive = True
 
         self.image = pygame.image.load("assets/images/enemy.png").convert_alpha()
@@ -30,11 +28,23 @@ class Enemy:
         self.tilemap = tilemap
 
     def update(self, player):
+        if not self.alive:
+            return
+
         now = pygame.time.get_ticks()
+
         if now - self.last_move_time < self.move_delay:
             return
 
         self.last_move_time = now
+
+        # Если враг уже рядом с игроком — атакует
+        distance = abs(player.x - self.x) + abs(player.y - self.y)
+
+        if distance == 1:
+            player.take_damage(2)
+            return
+
         dx = 0
         dy = 0
 
@@ -42,18 +52,21 @@ class Enemy:
             dx = 1
         elif player.x < self.x:
             dx = -1
+
         if player.y > self.y:
             dy = 1
         elif player.y < self.y:
             dy = -1
 
-        if dx != 0 and not self.tilemap.is_wall(self.x + dx, self.y):
-            self.x += dx
-        elif dy != 0 and not self.tilemap.is_wall(self.x, self.y + dy):
-            self.y += dy
+        new_x = self.x + dx
+        new_y = self.y + dy
+
+        if dx != 0 and not self.tilemap.is_wall(new_x, self.y):
+            self.x = new_x
+        elif dy != 0 and not self.tilemap.is_wall(self.x, new_y):
+            self.y = new_y
 
     def draw(self, screen):
-
         if not self.alive:
             return
 
@@ -64,10 +77,8 @@ class Enemy:
         screen.blit(self.image, (px, py))
 
     def take_damage(self, damage):
-
         self.hp -= damage
 
         if self.hp <= 0:
             self.alive = False
             print("Враг убит")
-
