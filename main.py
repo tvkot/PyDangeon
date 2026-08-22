@@ -2,7 +2,7 @@ import pygame
 import os
 import settings as game_settings
 from settings import *
-from tilemap import *
+from tilemap import TileMap
 from player import *
 from enemy import *
 from menu import show_main_menu, _draw_box, _button_clicked
@@ -25,17 +25,26 @@ def create_screen():
 def run_game(screen, clock, character):
     tilemap = TileMap()
 
-    # Передаем выбранного персонажа
+    # 1. Получаем случайные безопасные клетки (индексы) для игрока
+    p_cell_x, p_cell_y = tilemap.get_safe_cell_position()
+
+    # 2. Создаем игрока ОДИН раз по безопасным координатам
     player = Player(
         tilemap,
-        start_x=1,
-        start_y=1,
+        start_x=p_cell_x,
+        start_y=p_cell_y,
         character=character,
     )
 
-    enemy = Enemy(x=5, y=5, tilemap=tilemap)
-    enemy2 = Enemy(x=10, y=10, tilemap=tilemap)
-    enemy3 = Enemy(x=15, y=15, tilemap=tilemap)
+    # 3. Получаем случайные безопасные клетки отдельно для каждого врага
+    e1_x, e1_y = tilemap.get_safe_cell_position()
+    e2_x, e2_y = tilemap.get_safe_cell_position()
+    e3_x, e3_y = tilemap.get_safe_cell_position()
+
+    # 4. Передаем координаты клеток в конструкторы врагов
+    enemy = Enemy(x=e1_x, y=e1_y, tilemap=tilemap)
+    enemy2 = Enemy(x=e2_x, y=e2_y, tilemap=tilemap)
+    enemy3 = Enemy(x=e3_x, y=e3_y, tilemap=tilemap)
 
     font_button = pygame.font.SysFont(None, 36)
 
